@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      # The live tests read real files with ffmpeg and Tesseract, as the apps do.
+      - name: Tools for the live tests
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg tesseract-ocr tesseract-ocr-eng
+
+      - name: Test
+        run: dotnet test --configuration Release
