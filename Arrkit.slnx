@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/Arrkit/Arrkit.csproj" />
+  <Project Path="tests/Arrkit.Tests/Arrkit.Tests.csproj" />
+</Solution>
