@@ -1,7 +1,8 @@
 # arrkit
 
 Shared code for Yann's media apps: [Ripparr](https://github.com/yannb2/ripparr),
-[Muxarr (fork)](https://github.com/yannb2/muxarr), and later Specarr and Salvarr.
+[Muxarr (fork)](https://github.com/yannb2/muxarr), [Salvarr](https://github.com/yannb2/salvarr)
+and [Specarr](https://github.com/yannb2/specarr).
 
 Each app adds this repository as a git submodule, so there is no package to publish and no token
 needed in CI or Docker builds.
@@ -11,10 +12,12 @@ needed in CI or Docker builds.
 | Namespace | What it does |
 |---|---|
 | `Arrkit.Subtitles` | PGS (Blu-ray picture subtitle) reader and renderer, PNG writer, Tesseract OCR, SDH cleaner, the SDH/commentary/forced classifier, French region (fr-CA or fr-FR) guess, side-by-side caption alignment, and `TrackSampler` (reads a few slices of a track from a big MKV with ffmpeg, plus Listen) |
+| `Arrkit.Logging` | `MemoryLog` and its logger provider: the app's last 2000 log lines in memory, newest first, for a Logs page (Ripparr, Salvarr, Specarr) |
 | `Arrkit.Processes` | `ToolRunner`, a small runner for ffmpeg and tesseract. Each app keeps its own runner for long jobs with progress |
 
-The library has no package references, so it builds inside an app that uses central package
-management (Muxarr) as well as one that doesn't (Ripparr).
+The library has no package references (only the ASP.NET Core framework reference, for `ILogger`),
+so it builds inside an app that uses central package management (Muxarr) as well as one that
+doesn't (Ripparr, Salvarr, Specarr).
 
 ## Using it in an app
 
