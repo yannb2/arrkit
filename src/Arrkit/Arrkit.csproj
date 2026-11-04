@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <!-- ILogger for Arrkit.Logging. A framework reference, not a package, so central package
+        <!-- ILogger for Arrkit.Logging, Blazor for its LogView page (a Razor class library). A framework reference, not a package, so central package
              management (Muxarr) is not involved. Every app using arrkit is an ASP.NET Core app. -->
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
