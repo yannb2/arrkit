@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Arrkit.Logging;
@@ -31,7 +32,7 @@ public sealed class MemoryLog
     /// </summary>
     public const string KeepLinesKey = "Logs:KeepLines";
 
-    private static readonly JsonSerializerOptions Json = new() { WriteIndented = false };
+    private static readonly JsonSerializerOptions Json = new() { Converters = { new JsonStringEnumConverter() } };
 
     private readonly LinkedList<LogLine> _lines = new();
     private readonly LinkedList<LogLine> _history = new();
