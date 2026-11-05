@@ -159,7 +159,8 @@ public sealed class ExtrasTests
         Assert.AreEqual(0, again.Copied);
         Assert.AreEqual(2, again.AlreadyThere);
         Assert.AreEqual("Copied 0 extras, 2 already there.", again.Summary);
-        Assert.HasCount(2, again.Targets);
+        Assert.HasCount(2, again.Placed);
+        Assert.AreEqual(files[0].Source, again.Placed[0].Step.File.Source);
     }
 
     [TestMethod]

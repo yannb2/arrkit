@@ -5,8 +5,10 @@ namespace Arrkit.Library;
 /// <summary>What a copy did.</summary>
 public sealed record ExtrasCopyResult(int Copied, int AlreadyThere, long Bytes, IReadOnlyList<(ExtraStep Step, string Error)> Failed)
 {
-    /// <summary>The files now in the library (copied, or already there).</summary>
-    public IReadOnlyList<string> Targets { get; init; } = [];
+    /// <summary>Each extra now in the library (copied, or already there) and the file it is.</summary>
+    public IReadOnlyList<(ExtraStep Step, string Target)> Placed { get; init; } = [];
+
+    public IEnumerable<string> Targets => Placed.Select(p => p.Target);
 
     public bool Ok => Failed.Count == 0;
 
@@ -38,7 +40,7 @@ public static class ExtrasCopier
         var copied = 0;
         long bytes = 0;
         var failed = new List<(ExtraStep, string)>();
-        var targets = steps.Where(s => s.State == ExtraStepState.AlreadyThere).Select(s => s.Target).ToList();
+        var placed = steps.Where(s => s.State == ExtraStepState.AlreadyThere).Select(s => (s, s.Target)).ToList();
         foreach (var step in steps.Where(s => s.State == ExtraStepState.Problem))
         {
             failed.Add((step, step.Problem ?? "Can't be copied."));
@@ -53,7 +55,7 @@ public static class ExtrasCopier
                 var target = await CopyOneAsync(step, verify, n => progress?.Invoke(done = start + n, total), log, cancellationToken);
                 copied++;
                 bytes += step.Size;
-                targets.Add(target);
+                placed.Add((step, target));
                 done = start + step.Size * (verify ? 2 : 1);
                 progress?.Invoke(done, total);
             }
@@ -65,7 +67,7 @@ public static class ExtrasCopier
             }
         }
 
-        return new ExtrasCopyResult(copied, steps.Count(s => s.State == ExtraStepState.AlreadyThere), bytes, failed) { Targets = targets };
+        return new ExtrasCopyResult(copied, steps.Count(s => s.State == ExtraStepState.AlreadyThere), bytes, failed) { Placed = placed };
     }
 
     /// <summary>Copies one file; returns where it ended up.</summary>
