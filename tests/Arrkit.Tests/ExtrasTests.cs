@@ -182,3 +182,33 @@ public sealed class ExtrasTests
         StringAssert.Contains(result.Summary, "not an extras folder");
     }
 }
+
+[TestClass]
+public sealed class VideoFilesTests
+{
+    [TestMethod]
+    public void ListsVideosInAFolderSkippingDotFiles()
+    {
+        var root = Directory.CreateTempSubdirectory("arrkit-videos-").FullName;
+        try
+        {
+            foreach (var name in new[] { "b.mkv", "a/c.MP4", "a/notes.nfo", ".hidden/d.mkv", "a/.e.mkv.copying", "Sample/x.mkv" })
+            {
+                var path = Path.Combine(root, name);
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                File.WriteAllText(path, "x");
+            }
+
+            var videos = VideoFiles.In(root).Select(p => Path.GetRelativePath(root, p)).ToList();
+            CollectionAssert.AreEqual(new[] { Path.Combine("a", "c.MP4"), "b.mkv", Path.Combine("Sample", "x.mkv") }, videos);
+            Assert.IsTrue(VideoFiles.IsSample(Path.Combine(root, "Sample", "x.mkv")));
+            Assert.IsTrue(VideoFiles.IsSample("Movie.2019.sample.mkv"));
+            Assert.IsFalse(VideoFiles.IsSample("Samples of Life.mkv"));
+            CollectionAssert.AreEqual(new[] { Path.Combine(root, "b.mkv") }, VideoFiles.In(Path.Combine(root, "b.mkv")));
+        }
+        finally
+        {
+            Directory.Delete(root, true);
+        }
+    }
+}
