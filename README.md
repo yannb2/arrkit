@@ -1,7 +1,7 @@
 # arrkit
 
 Shared code for Yann's media apps: [Ripparr](https://github.com/yannb2/ripparr),
-[Muxarr (fork)](https://github.com/yannb2/muxarr), [Salvarr](https://github.com/yannb2/salvarr)
+[Remuxarr](https://github.com/yannb2/remuxarr), [Salvarr](https://github.com/yannb2/salvarr)
 and [Specarr](https://github.com/yannb2/specarr).
 
 Each app adds this repository as a git submodule, so there is no package to publish and no token
