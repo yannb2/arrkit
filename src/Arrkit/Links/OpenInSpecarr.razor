@@ -1,0 +1,28 @@
+@* "Open in Specarr": a button (or a small icon in a table) to Specarr's page for a file or folder: tracks, bit rates,
+   Dolby Vision, the source guess. Shows nothing when the app has no Specarr address. *@
+@if (SpecarrLink.For(Url, Path) is { } link)
+{
+    if (Compact)
+    {
+        <a href="@link" target="_blank" rel="noopener" class="text-decoration-none ms-1 @Class" title="Details in Specarr (tracks, bit rates, Dolby Vision, source)"
+           @onclick:stopPropagation="true"><i class="bi bi-info-circle"></i></a>
+    }
+    else
+    {
+        <a href="@link" target="_blank" rel="noopener" class="btn btn-sm btn-outline-secondary @Class" title="Tracks, bit rates, Dolby Vision and the source guess, in Specarr"
+           @onclick:stopPropagation="true"><i class="bi bi-box-arrow-up-right me-1"></i>Open in Specarr</a>
+    }
+}
+
+@code {
+    /// <summary>Specarr's address as the browser reaches it; empty hides the link.</summary>
+    [Parameter] public string? Url { get; set; }
+
+    /// <summary>The file or folder, as this app's container sees it (Specarr mounts /movies, /tv and /downloads at the same paths).</summary>
+    [Parameter, EditorRequired] public string? Path { get; set; }
+
+    /// <summary>A small icon for a table row instead of a button.</summary>
+    [Parameter] public bool Compact { get; set; }
+
+    [Parameter] public string? Class { get; set; }
+}
