@@ -27,8 +27,9 @@ public static partial class FileNames
         season == 0 ? "Specials" : $"Season {season.ToString("00", CultureInfo.InvariantCulture)}";
 
     /// <summary>
-    /// A readable extra name from a file name: "The.Making.Of_1080p" gives "The Making Of 1080p". Dots and
-    /// underscores are taken as spaces only when the name has no spaces of its own.
+    /// A readable extra name from a file name: "Heat.1995.Making.Of.1080p.BluRay-GRP" gives "Making Of". Dots and
+    /// underscores are taken as spaces only when the name has no spaces of its own; the film's title and year in front
+    /// and the release details from the resolution on are left out.
     /// </summary>
     public static string ExtraName(string path)
     {
@@ -38,8 +39,23 @@ public static partial class FileNames
             name = name.Replace('.', ' ').Replace('_', ' ');
         }
 
-        return Safe(name);
+        name = ReleaseRegex().Replace(name, "");
+        var afterYear = TitleYearRegex().Match(name);
+        if (afterYear.Success && Safe(afterYear.Groups["rest"].Value).Length > 0)
+        {
+            name = afterYear.Groups["rest"].Value;
+        }
+
+        return Safe(name.Trim(' ', '-'));
     }
+
+    // "1080p BluRay x264-GRP" and everything after.
+    [GeneratedRegex(@"[\s\[(]+(480|576|720|1080|2160)[pi]\b.*$", RegexOptions.IgnoreCase)]
+    private static partial Regex ReleaseRegex();
+
+    // "Heat 1995 Making Of", "Heat (1995) - Making Of": the part after the year.
+    [GeneratedRegex(@"^.+?[\s(]+(19|20)\d{2}\)?[\s\-]+(?<rest>.+)$")]
+    private static partial Regex TitleYearRegex();
 
     [GeneratedRegex(@"\s+")]
     private static partial Regex SpacesRegex();

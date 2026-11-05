@@ -53,6 +53,10 @@ public sealed class ExtrasTests
     public void ExtraNamesAreReadable()
     {
         Assert.AreEqual("The Making Of Heat", FileNames.ExtraName("The.Making.Of.Heat.mkv"));
+        Assert.AreEqual("Making Of", FileNames.ExtraName("Heat.1995.Making.Of.1080p.BluRay.x264-GRP.mkv"));
+        Assert.AreEqual("Making Of", FileNames.ExtraName("Heat (1995) - Making Of.mkv"));
+        Assert.AreEqual("Title 03", FileNames.ExtraName("Title_03.mkv"));
+        Assert.AreEqual("Heat 1995", FileNames.ExtraName("Heat.1995.1080p.mkv"));
         Assert.AreEqual("Making Of - Part 1", FileNames.ExtraName("Making Of: Part 1.mkv"));
         Assert.AreEqual("Specials", FileNames.SeasonFolder(0));
         Assert.AreEqual("Season 03", FileNames.SeasonFolder(3));
